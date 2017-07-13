@@ -1,3 +1,6 @@
 #
 pictures/
 
+
+.DS_Store
+stopwords.txt

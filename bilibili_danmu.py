@@ -16,6 +16,7 @@ from xml.etree import ElementTree
 from collections import Counter
 
 import jieba
+from jieba import posseg
 import pandas
 import requests
 import matplotlib.pyplot as plt
@@ -77,9 +78,9 @@ def main():
             _dt = dt[dt.movie_time_minute==minute]
         all_text = []
         for text in _dt.text.values:
-            cut_words = jieba.cut(text)
-            # 去除停用词
-            cut_words = [x for x in cut_words if x not in stopwords and x.strip()]
+            cut_words = posseg.cut(text)
+            # 去除停用词 保留形容词和名词
+            cut_words = [x.word for x in cut_words if x.word not in stopwords and x.word.strip() and ('n' in x.flag or 'a' in x.flag)]
             all_text += cut_words
         text_counter = Counter(all_text)
         if minute == -1:
