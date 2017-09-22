@@ -1,6 +1,7 @@
 #
 pictures/
 log/
+*.pyc
 
 
 .DS_Store
