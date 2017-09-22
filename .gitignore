@@ -2,6 +2,7 @@
 pictures/
 log/
 *.pyc
+multi_task_manager/*.pyc
 
 
 .DS_Store
