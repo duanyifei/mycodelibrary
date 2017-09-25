@@ -113,7 +113,7 @@ def stop_process(filename):
 
 
 @keepalive()
-def executer(stop_event, func, in_queue=None, out_queue=None, logger=None, worker_name="", _locals={}, **kwargs):
+def executer(stop_event, func, in_queue=None, out_queue=None, logger=None, worker_name="", loop_sleep=0, _locals={}, **kwargs):
     """
     这些参数都是executer自己要用到的
     :param stop_event:
@@ -122,8 +122,8 @@ def executer(stop_event, func, in_queue=None, out_queue=None, logger=None, worke
     :param out_queue: 任务下发队列
     :param logger: 日志
     :param worker_name: 进程名称
+    :param loop_sleep: 每轮任务休眠时间
     :param _locals: 需要在进程fork之后执行的函数 比如新建mongo连接
-
     :param kwargs: 目标函数需要的参数
     :return:
     """
@@ -181,6 +181,21 @@ def executer(stop_event, func, in_queue=None, out_queue=None, logger=None, worke
             for queue in out_queue:
                 # todo size判断
                 queue.put(new_task)
+
+        if loop_sleep:
+            time.sleep(loop_sleep)
+    return
+
+def sleep(ts, stop_event=None):
+    if stop_event is not None:
+        ts = int(ts)
+        for i in range(ts):
+            if not stop_event.is_set():
+                time.sleep(1)
+            else:
+                break
+    else:
+        time.sleep(ts)
     return
 
 if __name__ == "__main__":
