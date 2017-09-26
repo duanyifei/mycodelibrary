@@ -40,7 +40,7 @@ def launch_process(target):
 def main():
     parser = argparse.ArgumentParser()
     for module_name in task_module_list:
-        parser.add_argument("--%s" % module_name, action="store_true")
+        parser.add_argument("--%s" % module_name, action="store_true", help=task_module_dict[module_name].__doc__)
     parser.add_argument("--all", action="store_true")
     parser.add_argument("--stop", action="store_true")
 
