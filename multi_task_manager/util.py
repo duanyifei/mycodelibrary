@@ -193,7 +193,7 @@ def executer(stop_event, func, **kwargs):
                 queue.put(new_task)
 
         if loop_sleep:
-            time.sleep(loop_sleep)
+            sleep(loop_sleep, stop_event)
     return
 
 def sleep(ts, stop_event=None):
