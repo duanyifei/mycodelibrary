@@ -113,7 +113,7 @@ def stop_process(filename):
 
 
 @keepalive()
-def executer(stop_event, func, in_queue=None, out_queue=None, logger=None, worker_name="", loop_sleep=0, _locals={}, **kwargs):
+def executer(stop_event, func, **kwargs):
     """
     这些参数都是executer自己要用到的
     :param stop_event:
@@ -127,6 +127,16 @@ def executer(stop_event, func, in_queue=None, out_queue=None, logger=None, worke
     :param kwargs: 目标函数需要的参数
     :return:
     """
+    in_queue= kwargs.get("in_queue", None)
+    out_queue = kwargs.get("out_queue", None)
+    logger = kwargs.get("logger", None)
+    worker_name = kwargs.get("worker_name", None)
+    loop_sleep = kwargs.get("loop_sleep", 0)
+    _locals = kwargs.get("_locals", {})
+    kwargs.update({
+            "stop_event": stop_event,
+            "func": func,
+            })
     # 创建执行locals中的函数
     new_locals = {}
     for var_name, var_func in _locals.items():
