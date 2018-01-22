@@ -140,7 +140,7 @@ def executer(stop_event, func, **kwargs):
     # 创建执行locals中的函数
     new_locals = {}
     for var_name, var_func in _locals.items():
-        new_locals.update({var_name: var_func()})
+        new_locals.update({var_name: var_func(**kwargs)})
     kwargs.update(new_locals)
 
     if not logger:
