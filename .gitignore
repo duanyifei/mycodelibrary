@@ -7,3 +7,7 @@ multi_task_manager/*.pyc
 
 .DS_Store
 stopwords.txt
+
+
+# pycharm
+.idea/
