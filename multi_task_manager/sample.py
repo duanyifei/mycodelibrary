@@ -12,7 +12,7 @@ import setting
 logger = log.get_logger(__file__)
 
 
-def get_mongodb_connect():
+def get_mongodb_connect(**kwargs):
     """
     pymongo建立的链接不能跨进程 所以建立此函数 用于在进程启动后建立链接
     """
@@ -37,7 +37,7 @@ def middle_worker(task, **kwargs):
         既消费又生产
     """
     print("I am a middle workeer")
-    print task
+    print(task)
     task += "middle"
     return task
 

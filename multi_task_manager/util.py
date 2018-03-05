@@ -1,7 +1,10 @@
 # coding:utf8
 import os
 import time
-import Queue
+try:
+    import Queue
+except ImportError:
+    import queue as Queue
 
 import functools
 import threading
