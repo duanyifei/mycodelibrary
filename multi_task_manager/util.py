@@ -1,6 +1,7 @@
 # coding:utf8
 import os
 import time
+import warnings
 try:
     import Queue
 except ImportError:
@@ -12,6 +13,10 @@ import multiprocessing
 
 import log
 import setting
+
+import platform
+
+os_name = platform.system()
 
 _logger = log.get_logger(__file__)
 
@@ -63,6 +68,9 @@ def launch_process(target, args=(), kwargs=None, type=setting.PROCESS_MODE):
     elif type == "process":
         if kwargs is None:
             kwargs = {}
+        if os_name == 'Windows':
+            kwargs.pop("logger", "")
+            warnings.warn("Windows don't support logger object")
         p = multiprocessing.Process(target=target, args=args, kwargs=kwargs)
     p.start()
     return p
