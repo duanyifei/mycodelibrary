@@ -12,6 +12,7 @@
     # 停止指定命令
     python main.py --stop --sample
 """
+import time
 import argparse
 import multiprocessing
 
@@ -40,14 +41,39 @@ def launch_process(target):
 def main():
     parser = argparse.ArgumentParser()
     for module_name in task_module_list:
-        parser.add_argument("--%s" % module_name, action="store_true", help=task_module_dict[module_name].__doc__)
+        parser.add_argument("--%s" % module_name,
+            action="store_true",
+            help=task_module_dict[module_name].__doc__)
     parser.add_argument("--all", action="store_true")
+    parser.add_argument("--restart", action="store_true")
     parser.add_argument("--stop", action="store_true")
 
     process_list = []
 
     cmd_args = parser.parse_args()
-    if not cmd_args.stop:
+    if cmd_args.stop:
+        if cmd_args.all:
+            util.stop_process("all")
+        else:
+            for module_name, _module in task_module_dict.items():
+                if getattr(cmd_args, module_name):
+                    util.stop_process(module_name)
+    elif cmd_args.restart:
+        if cmd_args.all:
+            print("--all is forbidden")
+            pass
+            # 禁用
+            # util.stop_process("all")
+            # func_list = [_module.run for _module in task_module_dict.values()]
+            # for func in func_list:
+            #     process_list.append(launch_process(func))
+        else:
+            for module_name, _module in task_module_dict.items():
+                if getattr(cmd_args, module_name):
+                    util.stop_process(module_name)
+                    time.sleep(5)
+                    process_list.append(launch_process(_module.run))
+    else:
         if cmd_args.all:
             print("--all is forbidden")
             pass
@@ -59,13 +85,8 @@ def main():
             for module_name, _module in task_module_dict.items():
                 if getattr(cmd_args, module_name):
                     process_list.append(launch_process(_module.run))
-    else:
-        if cmd_args.all:
-            util.stop_process("all")
-        else:
-            for module_name, _module in task_module_dict.items():
-                if getattr(cmd_args, module_name):
-                    util.stop_process(module_name)
+
+
 
     for p in process_list:
         p.join()
