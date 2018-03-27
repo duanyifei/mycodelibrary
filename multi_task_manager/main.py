@@ -12,6 +12,8 @@
     # 停止指定命令
     python main.py --stop --sample
 """
+
+# todo 增加不需注册即可使用的命令行支持
 import time
 import argparse
 import multiprocessing
